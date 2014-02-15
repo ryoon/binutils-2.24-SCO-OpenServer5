@@ -639,7 +639,11 @@ extern int strverscmp (const char *, const char *);
 #endif
 
 /* Set the title of a process */
+#if defined(_SCO_DS)
+extern int setproctitle (const char *name, ...);
+#else
 extern void setproctitle (const char *name, ...);
+#endif
 
 /* Increase stack limit if possible.  */
 extern void stack_limit_increase (unsigned long);
