@@ -1656,6 +1656,15 @@ obj_elf_version (int ignore ATTRIBUTE_UNUSED)
       *input_line_pointer = c;
 
       /* Create the .note section.  */
+#ifndef SCO_ELF
+      /*
+       * NOTE: We must NOT do this for SCO ELF. This basically means that
+       * a .version is a no-op, but thats OK. It is more important to have
+       * the .note section for SCO ELF be the exact right size, else some
+       * of the older tools will fail (things like the file command), and
+       * so will the new link editor, which is much fussier about note
+       * sections.
+       */
       note_secp = subseg_new (".note", 0);
       bfd_set_section_flags (stdoutput,
 			     note_secp,
@@ -1681,6 +1690,7 @@ obj_elf_version (int ignore ATTRIBUTE_UNUSED)
       frag_align (2, 0, 0);
 
       subseg_set (seg, subseg);
+#endif /* !SCO_ELF */
     }
   else
     as_bad (_("expected quoted string"));
